@@ -29,5 +29,37 @@ x <- read_csv("~/data/census/censoc_dmf_v2/censoc_dmf_v2.csv",
 ```
 
 
+```{r create small}
+small <- x %>% 
+  slice_sample(n = 74194)
+  
+```
 
+```{r plot death}
+barplot
+
+x %>% 
+  ggplot(aes(x = dmonth)) +
+  geom_bar()
+```
+```{r mortality in january over time}
+small %>% 
+  filter(dmonth == c(1, 7)) %>% 
+  group_by(dyear, dmonth) %>% 
+  summarise(deaths = n(),
+            .groups = "drop") %>% 
+  pivot_wider(names_from = dmonth,
+              names_prefix = "month",
+              values_from = deaths) %>% 
+  mutate(death_ratio = month1 / month7) %>% 
+  ggplot(aes(x = dyear,
+             y = death_ratio)) +
+  geom_point() 
+```
+```{r}
+mortality %>% 
+  ggplot(aes(x = dyear,
+             y = death_ratio)) +
+  geom_point()
+```
 
